@@ -2,8 +2,19 @@ server:
   port: 8096
 
 spring:
+  application:
+    name: API-GATEWAY
+
   security:
     oauth2:
       resourceserver:
         jwt:
           issuer-uri: http://localhost:8095/realms/master
+
+  cloud:
+    gateway:
+      routes:
+        - id: DEMO-SERVICE
+          uri: http://localhost:8082
+          predicates:
+            - Path=/api/products/**
