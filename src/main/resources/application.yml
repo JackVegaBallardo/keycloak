@@ -12,7 +12,7 @@ spring:
     oauth2:
       resourceserver:
         jwt:
-          issuer-uri: http://localhost:8095/realms/master
+          issuer-uri: http://localhost:8095/realms/master   # <--realm real
 
   cloud:
     gateway:
@@ -23,3 +23,29 @@ spring:
               uri: http://localhost:8082
               predicates:
                 - Path=/api/products/**
+
+            - id: USER-SERVICE
+              uri: http://localhost:8071
+              predicates:
+                - Path=/me, /me/**
+
+          globalcors:
+            add-to-simple-url-handler-mapping: true
+            cors-configurations:
+              '[/**]':
+                allowed-origins:
+                  - "http://localhost:4200"
+                allowed-methods:
+                  - GET
+                  - POST
+                  - PUT
+                  - PATCH
+                  - DELETE
+                  - OPTIONS
+                allowed-headers:
+                  - Authorization
+                  - Content-Type
+                  - Accept
+                  - Origin
+                  - X-Requested-With
+                allow-credentials: false
