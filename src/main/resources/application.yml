@@ -29,6 +29,11 @@ spring:
               predicates:
                 - Path=/me, /me/**
 
+            - id: TASK-SERVICE
+              uri: http://localhost:8061
+              predicates:
+                - Path=/api/tasks/**
+
           globalcors:
             add-to-simple-url-handler-mapping: true
             cors-configurations:
