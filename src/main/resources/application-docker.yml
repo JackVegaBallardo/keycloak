@@ -1,0 +1,44 @@
+server:
+  port: 8096
+
+spring:
+  application:
+    name: API-GATEWAY
+  main:
+    web-application-type: reactive
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt: 
+           #issuer-uri:  http://localhost:8001/realms/master
+            #jwk-set-uri: http://keycloak-sv:8080/realms/master/protocol/openid-connect/certs
+            issuer-uri: http://keycloak-sv:8080/realms/master
+           #issuer-uri: http://keycloak-sv:8001/realms/master
+
+  cloud:
+    gateway:
+      server:
+        webflux:
+          routes:
+            - id: DEMO-SERVICE
+              uri: http://demo-service:8082        
+              predicates:
+                - Path=/api/products/**
+            - id: USER-SERVICE
+              uri: http://user-ms:8071             
+              predicates:
+                - Path=/me, /me/**
+            - id: TASK-SERVICE
+              uri: http://task-ms:8061             
+              predicates:
+                - Path=/api/tasks/**
+          globalcors:
+            add-to-simple-url-handler-mapping: true
+            cors-configurations:
+              '[/**]':
+                allowed-origins:
+                  - "http://localhost:4200"     
+                allowed-methods: [GET, POST, PUT, PATCH, DELETE, OPTIONS]
+                allowed-headers: [Authorization, Content-Type, Accept, Origin, X-Requested-With]
+                allow-credentials: false
