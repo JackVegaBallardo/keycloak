@@ -38,7 +38,7 @@ spring:
             cors-configurations:
               '[/**]':
                 allowed-origins:
-                  - "http://localhost:4200"     
+                  - "http://localhost:8081"     
                 allowed-methods: [GET, POST, PUT, PATCH, DELETE, OPTIONS]
                 allowed-headers: [Authorization, Content-Type, Accept, Origin, X-Requested-With]
                 allow-credentials: false

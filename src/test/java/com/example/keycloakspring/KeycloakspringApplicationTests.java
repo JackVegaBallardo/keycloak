@@ -8,6 +8,7 @@ class KeycloakspringApplicationTests {
 
 	@Test
 	void contextLoads() {
+		assert(true);
 	}
 
 }
