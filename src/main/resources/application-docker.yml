@@ -10,27 +10,31 @@ spring:
   security:
     oauth2:
       resourceserver:
-        jwt: 
-           #issuer-uri:  http://localhost:8001/realms/master
-            #jwk-set-uri: http://keycloak-sv:8080/realms/master/protocol/openid-connect/certs
-            issuer-uri: http://keycloak-sv:8080/realms/master
-           #issuer-uri: http://keycloak-sv:8001/realms/master
+        jwt:
+          issuer-uri: http://keycloak-sv:8080/realms/master
 
   cloud:
     gateway:
+      # ✅ (opcional) que el gateway descubra servicios por Eureka
+      discovery:
+        locator:
+          enabled: true
+          lower-case-service-id: true
+
       server:
         webflux:
           routes:
             - id: DEMO-SERVICE
-              uri: http://demo-service:8082        
+              uri: http://demo-service:8082
               predicates:
                 - Path=/api/products/**
             - id: USER-SERVICE
-              uri: http://user-ms:8071             
+              uri: lb://user-ms           # ← ya OK
               predicates:
                 - Path=/me, /me/**
             - id: TASK-SERVICE
-              uri: http://task-ms:8061             
+              #uri: http://task-ms:8061           # ← CAMBIA a lb:// para balancear
+              uri: lb://TASK-SERVICE
               predicates:
                 - Path=/api/tasks/**
           globalcors:
@@ -38,7 +42,15 @@ spring:
             cors-configurations:
               '[/**]':
                 allowed-origins:
-                  - "http://localhost:8081"     
+                  - "http://localhost:8081"
                 allowed-methods: [GET, POST, PUT, PATCH, DELETE, OPTIONS]
                 allowed-headers: [Authorization, Content-Type, Accept, Origin, X-Requested-With]
                 allow-credentials: false
+
+# ✅ El gateway también debe ser cliente de Eureka:
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://eureka-server:8761/eureka/
+    register-with-eureka: true
+    fetch-registry: true
