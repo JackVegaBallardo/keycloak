@@ -28,6 +28,10 @@ spring:
               uri: http://localhost:8071
               predicates:
                 - Path=/me, /me/**
+            - id: user-friendships
+              uri: http://localhost:8071
+              predicates:
+                - Path=/api/friendships,/api/friendships/**
 
             - id: TASK-SERVICE
               uri: http://localhost:8061
