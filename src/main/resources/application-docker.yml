@@ -32,6 +32,12 @@ spring:
               uri: lb://user-ms           # ← ya OK
               predicates:
                 - Path=/me, /me/**
+            
+            - id: user-friendships
+              uri: lb://user-ms 
+              predicates:
+                - Path=/api/friendships,/api/friendships/**
+
             - id: TASK-SERVICE
               #uri: http://task-ms:8061           # ← CAMBIA a lb:// para balancear
               uri: lb://TASK-SERVICE
